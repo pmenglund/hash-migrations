@@ -1,5 +1,5 @@
 Hash.migration do
   up do |hash|
-    hash[:foo] = Array(hash[:foo])
+    hash[:bar] = 'foobar'
   end
 end

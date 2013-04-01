@@ -13,21 +13,36 @@ module Hash::Migrations
 
       Dir.entries(migrations_dir).each do |entry|
         unless entry.match(/^\.+$/)
-          file = File.new(File.join(migrations_dir, entry))
-          add(file)
+          path = File.join(migrations_dir, entry)
+          migration = Hash::Migrations::Migration.new
+          migration.load(path)
+          add(migration)
         end
       end
     end
 
     def add(migration)
-      @migrations << Hash::Migrations::Migration.new(migration)
+      @migrations << migration
     end
 
-    def run(hash)
+    def run(hash, options={})
+      # TODO raise error on existing version format?
+      # TODO only migrate to a certain version
+      schema_version = options.fetch(:schema_version, :schema_version)
+      version = hash[schema_version] || 0
+
       migrations.each do |migration|
-        hash.instance_eval migration
+        if version < migration.version
+          hash.instance_eval migration
+          version = migration.version
+          hash[schema_version] = version
+        end
       end
+
       hash
+    rescue => e
+      # TODO better error message?
+      raise Hash::Migrations::MigrationFailed.new(e)
     end
   end
 end

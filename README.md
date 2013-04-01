@@ -1,17 +1,29 @@
 # Hash Migrations
 
-TODO: Write a gem description
+Using a yaml file and then loading it into a hash, to store settings is a common pattern.
+Over time the settings usually change, which will cause the code to contain checks for which version of the settings is used.
 
+Returns a new hash
 ```
-Hash::Migrator.run(hash, dir, options)
-hash.migrate(dir, options)
+migrated_hash = Hash::Migrator.run(hash, dir, options)
+```
 
+Modifies the existing hash
+```
+hash.migrate(dir, options)
+```
+
+A sample hash migration looks like this, and the file should be named `YYYYMMDDHHmmss_description.rb`
+```
 Hash.migration do
   up do |hash|
     hash[:foo] = hash['foo']
+    hash.delete('foo')
   end
 
   down do
+    hash['foo'] = hash[:foo]
+    hash.delete(:foo)
   end
 end
 ```
