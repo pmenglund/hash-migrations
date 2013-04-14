@@ -5,8 +5,12 @@ require 'hash/migrations/migrator'
 require 'hash/migrations/core_ext'
 
 module Hash::Migrations
-  # returns a new hash with migrations run
-  def run(hash, dir, options={direction: :up})
+  # Apply migrations to a hash
+  # @param [Hash] hash hash to be migrated
+  # @param [String] dir path to the directory containing the migrations to apply
+  # @param [Hash] options options
+  # @return [Hash] migrated hash
+def run(hash, dir, options={direction: :up})
     hash.dup.migrate(dir, options)
   end
 

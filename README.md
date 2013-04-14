@@ -3,30 +3,33 @@
 Using a yaml file and then loading it into a hash, to store settings is a common pattern.
 Over time the settings usually change, which will cause the code to contain checks for which version of the settings is used.
 
-Returns a new hash
-```
-migrated_hash = Hash::Migrator.run(hash, dir, options)
-```
+This gem introduces migrations for hashes so you can keep the code simple and maintain changes to the hash in separate migration files.
 
-Modifies the existing hash
-```
-hash.migrate(dir, options)
-```
+It can be used in two ways, either it returns a new hash:
+
+    migrated_hash = Hash::Migrator.run(hash, dir, options)
+
+
+Or it can modify the existing hash, if you call the instance method.
+
+    hash.migrate(dir, options)
+
 
 A sample hash migration looks like this, and the file should be named `YYYYMMDDHHmmss_description.rb`
-```
-Hash.migration do
-  up do |hash|
-    hash[:foo] = hash['foo']
-    hash.delete('foo')
-  end
 
-  down do
-    hash['foo'] = hash[:foo]
-    hash.delete(:foo)
-  end
-end
-```
+    Hash.migration do
+      up do |hash|
+        hash[:foo] = hash['foo']
+        hash.delete('foo')
+      end
+
+      down do
+        hash['foo'] = hash[:foo]
+        hash.delete(:foo)
+      end
+    end
+
+The migration assumes you have a top-level hash key named `:schema_version` (initialized to `0` if not present) which is used to track the migrations needed.
 
 ## Installation
 
@@ -41,10 +44,6 @@ And then execute:
 Or install it yourself as:
 
     $ gem install hash-migrations
-
-## Usage
-
-TODO: Write usage instructions here
 
 ## Contributing
 

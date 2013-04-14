@@ -1,5 +1,6 @@
 module Hash::Migrations
   class Migrator
+    # @return [Array[Hash::Migrations::Migration]] the list of migrations in this migration
     attr_reader :migrations
 
     def initialize(migrations_dir=nil)
@@ -25,6 +26,9 @@ module Hash::Migrations
       @migrations << migration
     end
 
+    # @param [Hash] hash hash to be migrated
+    # @param [Hash] options options
+    # @return [Hash] migrated hash
     def run(hash, options={})
       # TODO raise error on existing version format?
       # TODO only migrate to a certain version

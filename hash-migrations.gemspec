@@ -8,8 +8,8 @@ Gem::Specification.new do |gem|
   gem.version       = Hash::Migrations::VERSION
   gem.authors       = ["Martin Englund"]
   gem.email         = ["martin@englund.nu"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
+  gem.description   = %q{Migrations to manage hashes}
+  gem.summary       = %q{Migrations for hashes}
   gem.homepage      = ""
 
   gem.files         = `git ls-files`.split($/)
